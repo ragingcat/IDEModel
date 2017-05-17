@@ -1,0 +1,4 @@
+## Primary deps:
+Django==1.10.6
+django-express>=0.3.1.dev
+pymongo==3.4.0

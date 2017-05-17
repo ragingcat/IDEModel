@@ -1,0 +1,529 @@
+.overlay.overlay-cm{
+	background-color: rgba(0, 0, 0, 0.5);
+	position: relative;
+	z-index: 1999;
+	overflow-y: auto;
+	.overlay-content-ct{
+		width: 960px;
+		//padding-top: @grid-gutter-width * 4;
+		.top-text-holder{
+			padding-top: @grid-gutter-width !important;
+			text-align: left;
+			.top-text{
+				line-height: 1.5em;
+				>span{
+					color: #ccc;
+					font-size: 1.5em;
+					font-weight: 600;
+				}
+			}
+		}
+		.regional-cm{
+			.top-bar{
+				.search-bar-holder,
+				.sort-bar-holder,
+				.group-view-holder{
+					width: 33%;
+					float: left;
+				}
+				.search-bar-holder{
+					text-align: left;
+					.search-bar{
+						position: relative;
+						line-height: 1.45em;
+						input{
+							height: 35px;
+							width: 100%;
+							border: 1px solid @border;
+							box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+						}
+						>i{
+							position: absolute;
+							font-size: 1.25em;
+							color: @border;
+							right: 0;
+							top: 7px;
+						}
+					}
+				}
+				.sort-bar-holder{
+					text-align: center;
+					.sort-bar{
+						width: 100%;
+						background-color: #fff;
+						border: 1px solid @border;
+						box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+						height: 100%;
+						width: 100%;
+						padding: 0.4em @grid-gutter-width / 2;
+						.sessions{
+							float: left;
+							text-align: left;
+						}
+						.users{
+							float: right;
+							text-align: right;
+						}
+						.traffic{
+							display: inline-block;
+						}
+						.sessions,
+						.traffic,
+						.users{
+							>span{
+								&:first-child{
+									font-size: 0.8em;
+									font-weight: 600;
+									color: @gray;
+								}
+								&:last-child{
+									font-size: 0.8em;
+								}
+							}
+							&:hover{
+								>span{
+									&:first-child{
+										text-shadow: 0px 0px 10px @gray;
+									}
+								}
+							}
+
+						}
+					}
+				}
+				.group-view-holder{
+					text-align: center;
+					.view-bar{
+						width: 100%;
+						background-color: #fff;
+						padding: 0.4em @grid-gutter-width / 2;
+						border: 1px solid @border;
+						box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+						height: 100%;
+						width: 100%;
+						.individual-view,
+						.group-view{
+							display: inline-block;
+							width: 50%;
+							>span{
+								font-size: 0.8em;
+								font-weight: 600;
+								color: @gray;
+							}
+							>i{
+								cursor: default;
+							}
+							&.active{
+								>span{
+									text-shadow: 1px 1px 7px @gray-dark;
+								}
+							}
+						}
+					}
+				}
+				.close-button-holder{
+					position: relative;
+					.close-button{
+						position: absolute;
+						right: -40px;
+						border-radius: 50%;					
+						padding: 3px;
+						display: inline-block;
+						background-color: #fff;
+						float: right;
+						box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+						border: 1px solid #000;
+						.close-button-inner{
+							border-radius: 50%;
+							border: 2px solid #000;
+							padding: 0.1em;
+							line-height: 1.6em;
+							>i{
+								font-size: 1.25em;
+								display: block;
+								margin: 0 auto;
+								font-weight: 600;
+							}
+						}
+						&.fixed{
+							position: fixed;
+							right: @grid-gutter-width * 2;
+							top: @grid-gutter-width;
+						}
+						
+					}
+				}
+			}
+			.region-individual-cms{
+				//max-height: 600px;
+				//overflow-y: auto;
+				>div{
+					&:extend(.clearfix all); //use clearfix here since this.more cannot style the collection view;
+					//adc holders, single and group, depends on view choices
+					.regional-cm-holder{
+						&.single-adc{
+							width: 33%;
+							float: left;
+						}
+						&.group-adc{
+							.group-name{
+								text-align: left;
+								position: relative;
+								z-index: 2;
+								.group-name-text{
+									position: relative;
+									display: inline-block;
+									padding: @grid-gutter-width / 2;
+									font-weight: 600;
+									color: #fff;
+									border-top: 3px solid darken(@border, 10%);
+									border-left: 3px solid darken(@border, 10%);
+									border-right: 3px solid darken(@border, 10%);
+								}
+								.group-name-bottom-left{
+									position: absolute;
+									left: 0;
+									bottom: @grid-gutter-width / 2;
+									width: @grid-gutter-width / 2;
+									height: 1px;
+									border-top: 3px solid darken(@border, 10%);
+								}
+								.group-name-bottom-right{
+									position: absolute;
+									bottom: @grid-gutter-width / 2;
+									right: 0;
+									height: 1px;
+									border-top: 3px solid darken(@border, 10%);
+								}
+							}
+							.region-group{
+								>div{
+									&:extend(.clearfix all);
+									.individual-cm{
+										padding: @grid-gutter-width / 2;
+										width: 33%;
+										float: left;
+									}
+								}
+							}
+						}
+						//----------------------------style for individual ADC devices----------------------------------//
+						.individual-cm{
+							//add
+							&.individual-cm-add{
+
+							}
+							//normal
+							&.individual-cm-normal{
+								&.active{
+									.cm-holder{
+										box-shadow: 0px 0px 1px 5px @brand-primary;
+										.cm-status-top .adc-name{
+											.adc-left-config{
+												visibility: visible;
+											}
+										}
+									}
+								}
+								&:hover{
+									.cm-holder{
+										box-shadow: 0px 0px 1px 5px @gray-light;
+										.cm-status-top .adc-name{
+											.adc-left-config{
+												visibility: visible;
+											}
+										}
+									}
+								}
+							}
+							.cm-holder{
+								background-color: #fff;
+								border: 1px solid @border;
+								box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+								// display: block;
+								// color: #000;
+								.cm-status-top{
+									.adc-name{
+										>div{
+											line-height: 1.5em;
+										}
+										.adc-name-text{
+											text-align: center;
+											display: inline-block;
+											//line-height: 1em;
+											>span{
+												font-weight: 600;
+												color: @gray;
+											}
+										}
+										.adc-left-config{
+											float: left;
+											text-align: left;
+											visibility: hidden;
+											margin-top: -1px;
+											>a{
+												>i{
+													font-size: 0.9em;
+													color: @gray;
+												}
+											}
+										}
+										.adc-right-config{
+											margin-top: -1px;
+											float: right;
+											text-align: right;
+											position: relative;
+											>i{
+												font-size: 0.9em;
+												color: @gray;
+												padding: 0.25em;
+												&.active{
+													border-radius: 50%;
+													box-shadow: 3px 3px 5px @gray;
+												}
+											}
+											.single-config-list{
+												position: absolute;
+												z-index: 3;
+												text-align: center;
+												box-shadow: 3px 3px 5px @gray;
+												left: -75px;
+												top: 25px;
+												//width: 120px;
+												>li{
+													white-space: nowrap;
+													padding: 0.5em;
+													line-height: 0.8em;
+													>span{
+														font-size: 0.8em;
+														font-weight: 600;
+														color: @gray;
+													}
+													&:hover{
+														background-color: @brand-info;
+													}
+												}
+											}
+										}
+									}
+
+								}
+								.cm-status{
+									height: 84px;
+									position: relative;
+									text-align: left;
+									.fortinet-icon-holder{
+										position: absolute;
+										right: 108px;
+										top: 14px;
+						    			transform: skewX(-45deg);
+						    			>i{
+						    				transform:scale(2,1);
+						    				display: block;
+						    				color: rgba(155, 155, 155, 0.4);
+						    				font-size: 1.25em;
+						    				width: 100%;
+						    			}
+									}
+									.region-cm-status-left,
+									.region-cm-status-right{
+										height: 100%;
+										display: inline-block;
+										vertical-align: bottom;
+									}
+									.region-cm-status-left{
+										width: 35%;
+									}
+									.region-cm-status-right{
+										width: 50%;
+									}
+									//left gauge
+									.cm-status-left{
+										height: 100%;
+										.gauge{
+											height: 100%;
+											width: 40px;
+											position: relative;
+											margin-left: 35px;
+											.gauge-text{
+												position: absolute;
+												transform: rotate(-90deg);
+												transform-origin: left top 0;
+												line-height: 0.6em;
+												left: -2px;
+												top: 45px;
+												.gauge-text-title,
+												.gauge-text-number{
+													font-size: 0.6em;
+													color: @gray;
+													font-weight: 600;
+												}
+											}
+											.gauge-body,
+											.gauge-body-bottom{
+												box-shadow: 5px 3px 1px @border;
+											}
+											.gauge-body,
+											.gauge-body-cover{
+												position: absolute;
+												height: 50px;
+												background-color: @background;
+												border-top-left-radius: 10%;
+												border-top-right-radius: 10%;
+											}
+											.gauge-body{
+												z-index: 1;
+												width: 14px;
+												left: 13px;
+												border: 1px solid black;
+												
+											}
+											.gauge-body-cover{
+												z-index: 3;
+												width: 12px;
+												left: 14px;
+												top: 2px;
+											}
+											.gauge-body-inner{
+												position: absolute;
+												height: 53px;
+												z-index: 3;
+												width: 8px;
+												left: 16px;
+												top: 2px;
+												.gauge-body-inner-color{
+													border-top-right-radius: 10%;
+													border-top-left-radius: 10%;
+													position: absolute;
+													bottom: 0;
+													left: 0;
+													right: 0;
+													//top: 100%;
+													background-color: @brand-success;
+													-webkit-transition: .5s;
+					    							transition: .5s;
+												}
+											}
+											.gauge-body-bottom{
+												position: absolute;
+												width: 24px;
+												height: 24px;
+												top: 44px;
+												left: 8px;
+												border: 1px solid #000;
+												border-radius: 50%;
+												z-index: 2;
+												background-color: @background;
+											}
+											.gauge-body-bottom-inner{
+												position: absolute;
+												width: 18px;
+												height: 18px;
+												top: 47px;
+												left: 11px;
+												border-radius: 50%;
+												z-index: 4;
+												.gauge-body-bottom-inner-color{
+													position: absolute;
+													border-radius: 50%;
+													left: 0;
+													right: 0;
+													top: 0;
+													bottom: 0;
+													background-color: @brand-success;
+													-webkit-transition: .5s;
+					    							transition: .5s;
+												}
+											}
+											
+										}
+									}
+								}
+								.cm-status-text{
+									text-align: left;
+									.application-holder{
+										border-bottom: 1px solid @border;
+										padding-bottom: 0.25em;
+										.application-text{
+											display: inline-block;
+											>span{
+												font-size: 0.8em;
+												font-weight: 600;
+												color: @gray;
+											}
+											margin-right: @grid-gutter-width / 2;
+										}
+										.serving,
+										.maintainance{
+											display: inline-block;
+											>span{
+												&:first-child{
+													font-weight: 600;
+													font-size: 0.9em;
+												}
+												&:last-child{
+													font-weight: 600;
+													font-size: 0.75em;
+													color: @gray;
+												}
+											}
+										}
+										.serving{
+											margin-right: @grid-gutter-width / 2;
+										}
+									}
+									.server-holder{
+										padding-top: 0.25em;
+										white-space: nowrap; //prevent wrap for longer data
+										.server-text{
+											display: inline-block;
+											>span{
+												font-size: 0.8em;
+												font-weight: 600;
+												color: @gray;
+											}
+											margin-right: @grid-gutter-width / 2;
+										}
+										.load,
+										.serving,
+										.maintainance{
+											display: inline-block;
+											>span{
+												&:first-child{
+													font-weight: 600;
+													font-size: 0.9em;
+												}
+												&:last-child{
+													font-weight: 600;
+													font-size: 0.75em;
+													color: @gray;
+												}
+											}
+										}
+										.load,
+										.serving{
+											margin-right: @grid-gutter-width / 2;
+										}
+									}
+								}
+								//style for adding a new devide
+								.add-holder{
+									padding: 45px 0;
+									.add-text{
+										>span{
+											font-weight: 600;
+											color: @gray;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.bottom{
+
+		}
+	}
+}
