@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ide',
     'cloudtest',
+    'test0',
 ]
 
 ALLOWED_HOSTS = [
@@ -122,6 +123,11 @@ LOGGING = {
         #     'level': 'DEBUG',
         #     'propagate': False,
         # },
+        'ide.apps': {
+            'handlers': ['console', 'rotating_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'ide.views': {
             'handlers': ['console', 'rotating_file'],
             'level': 'DEBUG',

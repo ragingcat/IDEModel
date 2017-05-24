@@ -43,6 +43,7 @@
 		app.global.product = 'ADC';
 		if(!window.location.href.includes('#navigate')){
 			window.location.href = '#navigate/Models/Models.Display';
+			// window.location.href = '#navigate/Models/Models.Menu';
 		}
 	});
 

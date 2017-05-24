@@ -8,7 +8,7 @@
     app.page('Models', {
         template: [
             '<div style="height: 100%; width: 100%; display: flex; flex-flow: row; justify-content: flex-start; position: relative;">',
-                '<div style="flex: 0 0 220px;" view="Models.Menu"></div>',
+                '<div style="flex: 0 0 220px;" view="Models.MenuCt"></div>',
                 '<div style="flex: 0 0 3px;background-color: #ddd;"></div>',
                 '<div style="flex: 1 1 0px; display: flex; flex-flow: column; justify-content: flex-start;" class="body">',
                     // '<div style="flex: 0 0 38px;" view="BreadCrumbs"></div>',
@@ -25,6 +25,7 @@
         //     // bars: false
         // },
         navRegion: 'panel',
+        coop: ['show-model'],
         actions: {
             'remove-filter': function(){
                 //appearance
@@ -38,6 +39,14 @@
             console.log('aa')
         },
         onNavigateTo: function(path){
+        },
+        onShowModel: function(path){
+            console.log(path);
+            this.show('panel', 'Models.Display', {
+                data: {
+                    app: path
+                }
+            });
         }
 
     });

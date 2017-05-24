@@ -6,19 +6,33 @@
  */
 ;(function(app){
 
-	app.view('Models.Menu', {
+	app.view('Models.MenuCt', {
 
-		template: '@view/models/menu.html',
+		template: '<div region="apps"></div>',
+		// template: '@view/models/menu.html',
 		//data: 'url', {} or [],
 		//coop: ['e', 'e'],
 		//[editors]: {...},
 		
-		initialize: function(){},
-		//onShow: function(){},
+		initialize: function(){
+		},
+		onReady: function(){
+			var that = this;
+			app.remote({
+			    url: '/model/apps/',
+			}).then(function(data){
+				that.show('apps', 'Models.Menu', 
+					{
+						data: {
+							apps: data.payload
+						}
+					}
+				);
+			});
+		},
 		//onDataRendered: function(){},
 		
 		actions: {
-		//	submit: function(){...},
 		//	dosomething: function(){...},
 		//	...
 		},
@@ -36,5 +50,20 @@
 			}
 		},
 	});
+	app.view('Models.Menu', {
 
+		template: '@view/models/menu.html',
+		
+		actions: {
+			goto: function(self){
+				console.log(self.data('link'));
+				app.coop('show-model', self.data('link'))
+			},
+		},
+		initialize: function(){
+		},
+		onReady: function(){
+
+		},
+	});
 })(Application);
