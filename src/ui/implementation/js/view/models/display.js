@@ -161,32 +161,74 @@
                     };
 
                     // Per-type markers, as they don't inherit styles.
+                    // svg.append("defs").selectAll("marker")
+                    //     // .data(["many_to_one", "one_to_one", "many_to_many"])
+                    //     .data(['circle'])
+                    //     .enter().append("marker")
+                    //     .attr("id", function(d) {
+                    //         return d;
+                    //     })
+                    //     // .attr("viewBox", "0 -5 10 10")
+                    //     .attr("refX", 0)
+                    //     .attr("refY", 0)
+                    //     // .attr("refY", function(d) {
+                    //     //     return refYs[d];
+                    //     // })
+                    //     // .attr("markerWidth", 12)
+                    //     // .attr("markerHeight", 12)
+                    //     .attr("markerWidth", 24)
+                    //     .attr("markerHeight", 24)
+                    //     .attr("orient", "auto")
+                    //     .append("circle")
+                    //     .attr("style", 'stroke: none; fill:#000;')
+                    //     .attr("r", 3);
+                    // svg.append("defs").selectAll("marker")
+                    //     // .data(["many_to_one", "one_to_one", "many_to_many"])
+                    //     .data(["order0", "order1", "order2", "roder0", "rorder1", "rorder2"])
+                    //     .enter().append("marker")
+                    //     .attr("id", function(d) {
+                    //         return d;
+                    //     })
+                    //     .attr("viewBox", "0 -5 10 10")
+                    //     .attr("refX", 6)
+                    //     // .attr("refY", -.5)
+                    //     .attr("refY", function(d) {
+                    //         return refYs[d];
+                    //     })
+                    //     // .attr("markerWidth", 12)
+                    //     // .attr("markerHeight", 12)
+                    //     .attr("markerWidth", 6)
+                    //     .attr("markerHeight", 6)
+                    //     .attr("orient", "auto")
+                    //     .append("path")
+                    //     .attr("d", function(d) {
+                    //         if (d.startsWith('roder')) {
+                    //             return "M0,-5L10,0L0,5"
+                    //         } else {
+                    //             return "M0,-5L10,0L0,5"
+                    //         }
+                    //     });
+                    // .attr("d", "M0,-5L10,0L0,5");
                     svg.append("defs").selectAll("marker")
                         // .data(["many_to_one", "one_to_one", "many_to_many"])
-                        .data(["order0", "order1", "order2", "roder0", "rorder1", "rorder2"])
+                        .data(['circle'])
                         .enter().append("marker")
                         .attr("id", function(d) {
                             return d;
                         })
-                        .attr("viewBox", "0 -5 10 10")
-                        .attr("refX", 6)
-                        // .attr("refY", -.5)
-                        .attr("refY", function(d) {
-                            return refYs[d];
-                        })
+                        .attr("viewBox", "0 -7 16 16")
+                        .attr("refX", 0)
+                        .attr("refY", 0)
                         // .attr("markerWidth", 12)
                         // .attr("markerHeight", 12)
-                        .attr("markerWidth", 6)
-                        .attr("markerHeight", 6)
+                        .attr("markerWidth", 12)
+                        .attr("markerHeight", 12)
                         .attr("orient", "auto")
                         .append("path")
                         .attr("d", function(d) {
-                            if (d.startsWith('roder')) {
-                                return "M0,-5L10,0L0,5"
-                            } else {
-                                return "M0,-5L10,0L0,5"
-                            }
-                        });
+                            return "M0,0A3,3 0 1,0 6,0 A3,3 0 1,0 0,0z";
+                        })
+                        .attr("fill", 'black');
                     // .attr("d", "M0,-5L10,0L0,5");
                     var stroke_widths = {
                         "many_to_one": 2,
@@ -267,7 +309,8 @@
                     .attr("marker-end", function(d) {
                         // if(d.type === 'selft_to_self'){
                         if(d.source.name === d.target.name){
-                            return "url(#order" + d.order + ")"; 
+                            // return "url(#order" + d.order + ")"; 
+                            return "url(#circle)"; 
                         }else{
                             return '';
                         }
@@ -281,6 +324,13 @@
                         .enter().append("text")
                         // .attr("x", dimn.text)
                         // .attr("y", ".31em")
+                        .attr('id', function(d) {
+                            if (d.source) {
+                                return '';
+                            } else {
+                                return d.name.split('.').join('_');
+                            }
+                        })
                         .attr("class", function(d) {
                             // console.log(d.source);
                             if (d.source)
@@ -324,13 +374,14 @@
                         });
 
                     that.$el.find('[data-toggle="tooltip"]').tooltip();
-
+                    console.log(text);
 
                     // Use elliptical arc path segments to doubly-encode directionality.
                     function tick() {
                         path.attr("d", linkArc);
-                        circle.attr("transform", transform);
-                        text.attr("transform", transform);
+                        // circle.attr("transform", transform);
+                        circle.attr("transform", transformCircle);
+                        text.attr("transform", transformText);
                     }
 
                     var arcs = [];
@@ -359,7 +410,7 @@
                         }
                     }
 
-                    function transform(v) {
+                    function transformText(v) {
                         var d;
                         if(v.source){
                             d = v;
@@ -419,6 +470,8 @@
                             return "translate(" + xx + "," + yy + ") " + "rotate(" + deg + ")";
                         } else {
                             // console.log(d.source.vname + '->' + d.target.vname);
+                            var textLen = d3.select('text#'+d.name.split('.').join('_')).node().getComputedTextLength() || 0;
+                            // console.log(textLen);
                             var xx = (d.source.x + d.target.x) / 2,
                                 yy = (d.source.y + d.target.y) / 2,
                                 deg = 0;
@@ -448,8 +501,14 @@
                                     deg = (deg) * (180 / Math.PI);
                                 }
                             }
+                            if(textLen && ((deg < 0 && -deg > 90) || (deg > 90))){
+                                return "translate(" + d.x + "," + d.y + ") " + "rotate(" + deg + ") " + "rotate(180, " + (23 + textLen/2) + ", 0)";
+                            }
                             return "translate(" + d.x + "," + d.y + ") " + "rotate(" + deg + ")";
                         }
+                    }
+                    function transformCircle(d) {
+                        return "translate(" + d.x + "," + d.y + ")";
                     }
                 }).fail(function(data, textStatus, jqXHR) {
 
