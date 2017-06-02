@@ -58,7 +58,8 @@ def ParseModel(md):
                 ret[mkey]['fields'][name] = {
                     'name': name,
                     'verbose_name': vn,
-                    'type': field.get_internal_type()
+                    'type': field.get_internal_type(),
+                    'related_model': ''
                 }
                 # for kk in field:
                 # logger.debug(str(field.related_model))
@@ -83,13 +84,16 @@ def ParseModel(md):
                             # 'related_model': field.related_model.__name__ if field.related_model.__name__ else field.related_model,
                             'relation': aa
                         }
+                        ret[mkey]['fields'][name]['related_model'] = rmkey
                     else:
+                        rmkey = str(field.related_model)[len("<class '") : -2]
                         logger.debug(str(field.related_model))
-                        logger.debug(str(field.related_model)[len("<class '"):-2])
-                        ret[mkey]['relations'][str(field.related_model)[len("<class '"):-2]] = {
-                            'related_model': str(field.related_model)[len("<class '"):-2],
+                        logger.debug(rmkey)
+                        ret[mkey]['relations'][rmkey] = {
+                            'related_model': rmkey,
                             'relation': aa
                         }
+                        ret[mkey]['fields'][name]['related_model'] = rmkey
                     # logger.debug('  %s, %s' % (field.related_model.__name__, aa))
         elif inspect.ismodule(element):
             # logger.debug("%s: %s" % (element_name, type(element)))

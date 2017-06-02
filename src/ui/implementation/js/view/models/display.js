@@ -25,7 +25,7 @@
                     var indvSizes = [{
                         circle: 20,
                         text: 22,
-                        charge: -2500,
+                        charge: -1200,
                         distance: 120
                     }, {
                         circle: 8,
@@ -61,25 +61,6 @@
                     var dimn = getDimn(data.length);
                     // console.log("dimn", dimn);
                     var links = [];
-                    // var connsMeta = data.reduce(function(acc, val){
-                    //     var k = val.startSN + val.startPort;
-                    //     var k2 = val.endSN + val.endPort;
-                    //     if(!acc[k + k2] && !acc[k2 + k]){
-                    //         acc[k + k2] = {
-                    //             source: val.startSN,
-                    //             target: val.endSN,
-                    //             sourceName: that.data['ungrouped'][val.startSN] ? that.data['ungrouped'][val.startSN].platform || '' : '',
-                    //             targetName: that.data['ungrouped'][val.endSN] ? that.data['ungrouped'][val.endSN].platform || '' : '',
-                    //             type: 'suit'
-                    //         };
-                    //     }
-                    //     return acc;
-                    // }, {});
-                    // var lineCnt = {
-                    //     "many_to_one": 3,
-                    //     "one_to_one": 1,
-                    //     "many_to_many": 3
-                    // };
                     _.each(data, function(v, k) {
                         _.each(v.relations, function(r, name) {
                             if (r.relation === 'one_to_one' || k === r.related_model) {
@@ -161,54 +142,6 @@
                     };
 
                     // Per-type markers, as they don't inherit styles.
-                    // svg.append("defs").selectAll("marker")
-                    //     // .data(["many_to_one", "one_to_one", "many_to_many"])
-                    //     .data(['circle'])
-                    //     .enter().append("marker")
-                    //     .attr("id", function(d) {
-                    //         return d;
-                    //     })
-                    //     // .attr("viewBox", "0 -5 10 10")
-                    //     .attr("refX", 0)
-                    //     .attr("refY", 0)
-                    //     // .attr("refY", function(d) {
-                    //     //     return refYs[d];
-                    //     // })
-                    //     // .attr("markerWidth", 12)
-                    //     // .attr("markerHeight", 12)
-                    //     .attr("markerWidth", 24)
-                    //     .attr("markerHeight", 24)
-                    //     .attr("orient", "auto")
-                    //     .append("circle")
-                    //     .attr("style", 'stroke: none; fill:#000;')
-                    //     .attr("r", 3);
-                    // svg.append("defs").selectAll("marker")
-                    //     // .data(["many_to_one", "one_to_one", "many_to_many"])
-                    //     .data(["order0", "order1", "order2", "roder0", "rorder1", "rorder2"])
-                    //     .enter().append("marker")
-                    //     .attr("id", function(d) {
-                    //         return d;
-                    //     })
-                    //     .attr("viewBox", "0 -5 10 10")
-                    //     .attr("refX", 6)
-                    //     // .attr("refY", -.5)
-                    //     .attr("refY", function(d) {
-                    //         return refYs[d];
-                    //     })
-                    //     // .attr("markerWidth", 12)
-                    //     // .attr("markerHeight", 12)
-                    //     .attr("markerWidth", 6)
-                    //     .attr("markerHeight", 6)
-                    //     .attr("orient", "auto")
-                    //     .append("path")
-                    //     .attr("d", function(d) {
-                    //         if (d.startsWith('roder')) {
-                    //             return "M0,-5L10,0L0,5"
-                    //         } else {
-                    //             return "M0,-5L10,0L0,5"
-                    //         }
-                    //     });
-                    // .attr("d", "M0,-5L10,0L0,5");
                     svg.append("defs").selectAll("marker")
                         // .data(["many_to_one", "one_to_one", "many_to_many"])
                         .data(['circle'])
@@ -266,22 +199,45 @@
                         }
                     });
                     // Set the ranges
-                    var x = d3.time.scale().range([0, width]);
-                    var y = d3.scale.linear().range([height, 0]);
-
+                    var x = d3.time.scale().range([0, width]),
+                        y = d3.scale.linear().range([height, 0]),
+                        circleStroke = '#333';
+                    
                     var circle = svg.append("g").selectAll("circle")
                         .data(force.nodes())
                         .enter().append("circle")
                         .attr("r", dimn.circle)
-                        .on('mouseover', function(d, i) {
-                            // console.log("i", i);
-                            d3.select(this).append("text")
-                                .text(d.x)
-                                .attr("x", x(d.x))
-                                .attr("y", y(d.y));
+                        .attr("stroke", circleStroke)
+                        .on('click', function(d, i, j) {
+                            console.log("d", d);
+                            console.log("i", i);
+                            circle.attr("stroke", circleStroke);
+                            text.attr("stroke", 'none');
+                            d3.select(this).attr('stroke', '#44B78B');
+                            d3.event.stopPropagation();
+                            if(!that.data['raw'][d.name]){
+                                return;
+                            }
+                            var dd = {};
+                            _.each(that.data['raw'][d.name].fields, function(v, k){
+                                dd[v.name.split('.').join('-')] = {
+                                    first: _.last(v.name.split('.')),
+                                    second: v.type,
+                                    third: _.last(v.related_model.split('.')),
+                                };
+                            });
+                            app.curtain('default', true, 'Models.Fields', {
+                                data: {
+                                    mkey: d.name,
+                                    items: dd,
+                                    hdr: {
+                                        left: 'Field',
+                                        right: 'Type'
+                                    }
+                                }
+                            });
                         })
                         .call(force.drag);
-
                     _.each(force.nodes(), function(v, k){
                         if(nodePaths[v.name]){
                             nodePaths[v.name].self = v;
@@ -318,7 +274,21 @@
                     path[0] = _.union(path[0], path2[0]);
                     // console.log('path2:', path2);
                     // console.log('path:', path);
-                    var r = dimn.circle * 3 / 4;
+                    var r = dimn.circle * 3 / 4,
+                    relationTitleMap = {
+                        'one_to_one': {
+                            left: 'One',
+                            right: 'One'
+                        },
+                        'many_to_many': {
+                            left: 'Many',
+                            right: 'Many'
+                        },
+                        'many_to_one': {
+                            left: 'Many',
+                            right: 'One'
+                        }
+                    };
                     var text = svg.append("g").selectAll("text")
                         .data(_.union(force.nodes(), force.links()))
                         .enter().append("text")
@@ -361,18 +331,47 @@
                             else
                                 return '.31em';
                         })
+                        .on('click', function(d, i) {
+                            console.log("d", d);
+                            console.log("i", i);
+                            d3.event.stopPropagation();
+                            circle.attr("stroke", circleStroke);
+                            text.attr("stroke", 'none');
+
+                            if(d.source && that.data['raw'][d.source.name]){
+                                d3.select(this).attr('stroke', '#44B78B');
+                                app.curtain('default', true, 'Models.Relation', {
+                                    data: {
+                                        mkey: '',
+                                        hdr: relationTitleMap[d.type],
+                                        items: [{
+                                            first: d.source.name,
+                                            second: d.target.name,
+                                        }],
+                                    }
+                                });
+                            }
+                        })
                         .text(function(d) {
                             if (d.source) {
+                                var rel = '';
                                 if (d.source.name === d.target.name) {
-                                    return relationTitle[d.type].slice(-3);
+                                    rel = relationTitle[d.type].slice(-3);
                                 } else {
-                                    return relationTitle[d.type];
+                                    rel = relationTitle[d.type];
                                 }
+                                // if(rel === 'm : 1' && that.data['raw'][d.target.name]['relations'][d.source.name].relation === 'many_to_one' && d.source.x > d.target.x){
+                                return rel;
                             } else {
                                 return d.vname;
                             }
                         });
 
+                    svg.on('click', function(d, i) {
+                            app.curtain('default', false);
+                            circle.attr("stroke", circleStroke);
+                            text.attr("stroke", 'none');
+                    });
                     that.$el.find('[data-toggle="tooltip"]').tooltip();
                     console.log(text);
 
@@ -382,6 +381,23 @@
                         // circle.attr("transform", transform);
                         circle.attr("transform", transformCircle);
                         text.attr("transform", transformText);
+                        text.text(function(d){
+                            if(d.source){
+                                var rel = '';
+                                if (d.source.name === d.target.name) {
+                                    rel = relationTitle[d.type].slice(-3);
+                                } else {
+                                    rel = relationTitle[d.type];
+                                }
+                                if (d.target.x < d.source.x && d.type === 'many_to_one') {
+                                    return '1 : m';
+                                }
+                                return rel;
+                            } else {
+                                return d.vname;
+                            }
+
+                        });
                     }
 
                     var arcs = [];
@@ -393,9 +409,10 @@
                         // if(dx === 0 && dy === 0){
                         if (d.source.name === d.target.name) {
                             // d.source.x is exactly the center
-                            var x = d.source.x + r;
+                            var x = d.source.x, y = d.source.y - r;
 
-                            return "M" + x + "," + d.source.y + "A" + r + "," + r + " 0 1,1 " + (x - r) + "," + (d.target.y - r);
+                            return "M" + x + "," + y + "A" + r + "," + r + " 0 1,1 " + (x - r) + "," + (d.target.y);
+                            // return "M" + x + "," + d.source.y + "A" + r + "," + r + " 0 1,1 " + (x - r) + "," + (d.target.y - r);
                             // return "M" + x + "," + d.source.y + "L" + (x - dimn.circle) + "," + d.source.y;
                             // cicle to itself, draw a inner directed half circle
 
@@ -470,7 +487,8 @@
                             return "translate(" + xx + "," + yy + ") " + "rotate(" + deg + ")";
                         } else {
                             // console.log(d.source.vname + '->' + d.target.vname);
-                            var textLen = d3.select('text#'+d.name.split('.').join('_')).node().getComputedTextLength() || 0;
+                            var node = d3.select('text#' + d.name.split('.').join('_')).node(),
+                            textLen = node ? node.getComputedTextLength() : 0;
                             // console.log(textLen);
                             var xx = (d.source.x + d.target.x) / 2,
                                 yy = (d.source.y + d.target.y) / 2,

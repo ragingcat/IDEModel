@@ -40,6 +40,7 @@
 		onItemActivated: function($item) {
 		    app.navigate('Models/' + $item.data('context'));
 		    app.coop('breadcrumbs-change', [{href: 'Models', name: app.global.bcsMap['Models']}, {href: $item.data('context'), name: app.global.bcsMap[$item.data('context')]}]);
+		    
 		},
 		onContextSwitched: function($item) {
 			if(window.location.hash.startsWith("#navigate/Models")){

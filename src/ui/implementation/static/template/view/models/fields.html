@@ -1,0 +1,26 @@
+<div class="records-ct">
+    <div class="top-bar">{{mkey}}</div>
+    <div class="individual hdr border">
+        <span>{{hdr.left}}</span>
+        <span class="pull-right text-right">{{hdr.right}}</span>
+    </div>
+    <div region="individual-records" class="individuals">
+        {{#each items}}
+            {{#if third}}
+            <div class="individual field">
+                    <span>{{first}}</span>
+                    <span class="pull-right text-right">{{second}}</span>
+            </div>
+            <div class="individual field border">
+                    <span class="invisible">{{first}}</span>
+                    <span class="pull-right text-right">{{third}}</span>
+            </div>
+            {{else}}
+            <div class="individual field border">
+                    <span>{{first}}</span>
+                    <span class="pull-right text-right">{{second}}</span>
+            </div>
+            {{/if}}
+        {{/each}}
+    </div>
+</div

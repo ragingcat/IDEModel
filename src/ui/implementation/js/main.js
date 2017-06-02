@@ -8,6 +8,10 @@
 			split: ['4em:Header', '1:context'],
 			bars: false
 		},
+		icings: {
+			'default': {left:'75%', top:'4em', bottom: '0%', right: 0, 'overflow-y': 'auto', 'overflow-x': 'hidden'}
+		},
+
 		//default context
 		//defaultContext: 'Status',
 		//view source

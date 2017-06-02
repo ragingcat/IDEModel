@@ -47,6 +47,7 @@
                     app: path
                 }
             });
+            app.curtain('default', false);
         }
 
     });
